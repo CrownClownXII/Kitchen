@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitchen.Logic
+namespace Kitchen.Logic.Abstract
 {
-    public interface IOrderQueue
+    public interface ICookLogic
     {
-        void Enqueue(IOrder order);
+        Task CookMeal(IOrder order);
     }
 }

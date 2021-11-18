@@ -1,4 +1,5 @@
 ﻿using Kitchen.Infrastructure;
+using Kitchen.Logic.Abstract;
 using Kitchen.Model;
 using Kitchen.Model.Logic;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Kitchen.Logic
 {
-    delegate Task OrderReady(IOrder meal);
+    public delegate Task OrderReady(IOrder meal);
 
     public class OrderQueue : IOrderQueue
     {
@@ -24,14 +25,23 @@ namespace Kitchen.Logic
         private event OrderReady OrderReadyEvent;
 
         private readonly ILogger<OrderQueue> _logger;
+        private readonly ICookLogic _cookLogic;
+        private readonly IWaiterLogic _waiterLogic;
 
-        public OrderQueue(int producerCount, int consumerCount, ILogger<OrderQueue> logger)
+        public OrderQueue(int producerCount, 
+            int consumerCount, 
+            ILogger<OrderQueue> logger, 
+            ICookLogic cookLogic, 
+            IWaiterLogic waiterLogic
+        )
         {
             var thread = new Thread(new ThreadStart(OnStart));
 
             _cooksList = new Task[producerCount];
             _waitersList = new Task[consumerCount];
             _logger = logger;
+            _cookLogic = cookLogic;
+            _waiterLogic = waiterLogic;
 
             OrderReadyEvent += new OrderReady(OnOrderReady);
 
@@ -50,22 +60,17 @@ namespace Kitchen.Logic
                 var indexOfTask = _cooksList.GetFirstFreeTaskIndex().Result;
 
                 order.Logger = _logger;
+                order.OrderReadyEvent = OrderReadyEvent;
 
-                _cooksList[indexOfTask] = new CookLogic().CookMeal(order, OrderReadyEvent);
+                _cooksList[indexOfTask] = _cookLogic.CookMeal(order);
             }
         }
 
-        private async Task OnOrderReady(IOrder meal)
+        private async Task OnOrderReady(IOrder order)
         {
-            if (!meal.IsReady)
-            {
-                Console.WriteLine($"{meal.Table} Time exceeded!");
-                return;
-            }
-
             var indexOfTask = await _waitersList.GetFirstFreeTaskIndex();
 
-            _waitersList[indexOfTask] = new WaiterLogic().DeliverMeal(meal);
+            _waitersList[indexOfTask] = _waiterLogic.DeliverMeal(order);
         }
     }
 }

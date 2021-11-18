@@ -1,4 +1,4 @@
-﻿using Kitchen.Logic;
+﻿using Kitchen.Logic.Abstract;
 using Kitchen.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

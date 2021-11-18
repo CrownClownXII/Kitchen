@@ -21,7 +21,7 @@ namespace Kitchen.Model
             await BeatMeat(cancellationToken);
             await AssemblyBurger(cancellationToken);
 
-            IsReady = true;
+            _isReady = true;
         }
 
         public override async Task Deliver(CancellationToken cancellationToken = default)

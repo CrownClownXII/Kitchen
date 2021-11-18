@@ -21,7 +21,7 @@ namespace Kitchen.Model
             await SauteChicken(cancellationToken);
             await Mix(cancellationToken);
 
-            IsReady = true;
+            _isReady = true;
         }
 
         public override async Task Deliver(CancellationToken cancellationToken = default)

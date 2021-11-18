@@ -1,4 +1,5 @@
 ﻿using Kitchen.Logic;
+using Kitchen.Logic.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Kitchen.Model.Logic
 {
-    class CookLogic
+    public class CookLogic : ICookLogic
     {
-        public Task CookMeal(IOrder order, OrderReady orderReadyEvent)
+        public Task CookMeal(IOrder order)
         {
             var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(order.TimeToCook));
 
@@ -19,9 +20,8 @@ namespace Kitchen.Model.Logic
                 cancellationToken.Token.ThrowIfCancellationRequested();
 
                 await order.Cook(cancellationToken.Token);
-            }, cancellationToken.Token).ContinueWith(c => 
-            { 
-                orderReadyEvent(order);
+            }, cancellationToken.Token).ContinueWith(c => {
+                order.OnOrderCompleted();
             });
         }
     }

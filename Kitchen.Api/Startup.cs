@@ -1,4 +1,6 @@
 using Kitchen.Logic;
+using Kitchen.Logic.Abstract;
+using Kitchen.Model.Logic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,11 +36,16 @@ namespace Kitchen.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Kitchen.Api", Version = "v1" });
             });
 
+            services.AddSingleton<ICookLogic, CookLogic>()
+                .AddSingleton<IWaiterLogic, WaiterLogic>();
+
             services.AddSingleton<IOrderQueue, OrderQueue>(c =>
             {
                 var logger = c.GetRequiredService<ILogger<OrderQueue>>();
+                var cookLogic = c.GetRequiredService<ICookLogic>();
+                var waiterLogic = c.GetRequiredService<IWaiterLogic>();
 
-                return new OrderQueue(2, 1, logger);
+                return new OrderQueue(2, 1, logger, cookLogic, waiterLogic);
             });
         }
 
