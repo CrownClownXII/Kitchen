@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitchen.Model
+namespace Kitchen.Model.Configuration
 {
     public class InitData
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitchen.Infrastructure
 {
-    public static class TaskArrayExtensions
+    static class TaskArrayExtensions
     {
         public static async Task<int> GetFirstFreeTaskIndex(this Task[] taskArray)
         {

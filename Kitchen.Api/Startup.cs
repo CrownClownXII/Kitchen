@@ -1,3 +1,4 @@
+using Kitchen.Infrastructure;
 using Kitchen.Logic;
 using Kitchen.Logic.Abstract;
 using Kitchen.Model.Logic;
@@ -29,24 +30,13 @@ namespace Kitchen.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Kitchen.Api", Version = "v1" });
             });
 
-            services.AddSingleton<ICookLogic, CookLogic>()
-                .AddSingleton<IWaiterLogic, WaiterLogic>();
-
-            services.AddSingleton<IOrderQueue, OrderQueue>(c =>
-            {
-                var logger = c.GetRequiredService<ILogger<OrderQueue>>();
-                var cookLogic = c.GetRequiredService<ICookLogic>();
-                var waiterLogic = c.GetRequiredService<IWaiterLogic>();
-
-                return new OrderQueue(2, 1, logger, cookLogic, waiterLogic);
-            });
+            services.AddOrderQueue();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

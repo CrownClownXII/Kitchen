@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Kitchen.Logic.Abstract
 {
-    public interface IWaiterLogic
+    interface IWaiterLogic
     {
         Task DeliverMeal(IOrder order);
     }

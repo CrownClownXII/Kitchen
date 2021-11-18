@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Kitchen.Model.Logic
 {
-    public class WaiterLogic : IWaiterLogic
+    class WaiterLogic : IWaiterLogic
     {
         public Task DeliverMeal(IOrder order)
         {

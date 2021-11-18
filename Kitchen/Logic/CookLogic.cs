@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Kitchen.Model.Logic
 {
-    public class CookLogic : ICookLogic
+    class CookLogic : ICookLogic
     {
         public Task CookMeal(IOrder order)
         {

@@ -15,7 +15,7 @@ namespace Kitchen.Logic
 {
     public delegate Task OrderReady(IOrder meal);
 
-    public class OrderQueue : IOrderQueue
+    class OrderQueue : IOrderQueue
     {
         private readonly BlockingCollection<IOrder> _orderQueue = new();
 
